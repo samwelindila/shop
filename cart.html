@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>E-commerce web</title>
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+        <link rel="stylesheet" href="style.css">
+        <script src="store.js" async> </script>
+    </head>
+    <body>
+        <section id="header">
+            <a href="#" ><img src="images/download.png" class="logo"></a>
+
+            <div>
+                <ul id="navbar">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a  href="shop.html">Shop</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a  href="about.html">About</a></li>
+                    <li><a  href="contact.html">Contact</a></li>
+                    <li id="lg-bag"><a class="active"  href="cart.html"><i class="far fa-shopping-bag"></i></a></li>
+                    <a href="#" id="close"><i class="far fa-times"></i></a>
+                </ul>
+            </div>
+            <div id="mobile">
+                <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+                <i id="bar" class="fas fa-outdent"></i>
+            </div>
+        </section>
+        <section id="page-header" class="contact-header">
+            <h2>#let's-talk</h2>
+            <p>LEAVE A MESSAGE, we love to hear from you</p>
+        </section>
+        <section id="cart" class="section-p1">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <td>Remove</td>
+                        <td>Image</td>
+                        <td>Product</td>
+                        <td>Price</td>
+                        <td>Quantity</td>
+                        <td>Subtotal</td>
+                    </tr>
+                </thead>
+             <tbody>
+                     <tr>                       
+                        <td><a href="#"><i class="far fa-times-circle"></i></a></td>
+                        <td><img src="images/products/KALIII.jpg"></td>
+                        <td>Ndilla Official T-shirts</td>
+                        <td>$118.19</td>
+                        <td><input type="number" value="1" id="quantityInput1"
+                            class="quantity-input" onchange="updateSubtotal(1)"></td>
+                        <td id="subtotal1">$118.19</td> 
+                    </tr>
+
+                    <tr>
+                        <td><a href="#"><i class="far fa-times-circle"></i></a></td>
+                        <td><img src="images/products/NJANO.jpg" alt=""></td>
+                        <td>Ndilla Official T-shirts</td>
+                        <td>$118.19</td>
+                        <td><input type="number" value="1" id="quantityInput2"
+                            class="quantity-input" onchange="updateSubtotal(2)"></td>
+                        <td id="subtotal2">$118.19</td>
+                    </tr>
+                   
+                    <tr>
+                        <td><a href="#"><i class="far fa-times-circle"></i></a></td>
+                        <td><img src="images/products/ADIDAS 2.jpg" alt=""></td>
+                        <td>Ndilla Official T-shirts</td>
+                        <td>$118.19</td>
+                        <td><input type="number" value="1" id="quantityInput3"
+                            class="quantity-input" onchange="updateSubtotal(3)"></td>
+                        <td id="subtotal3">$118.19</td>
+                    </tr>
+                </tbody>
+            </table>
+
+<!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Add click event listener to "remove" icons
+        $('#cart').on('click', '.fa-times-circle', function(event) {
+            // Prevent default link behavior
+            event.preventDefault();
+            
+            // Find the parent <tr> element and remove it from the table
+            $(this).closest('tr').remove();
+        });
+    });
+</script>
+
+
+<!--script for sure user does not enter any value = 0 or negative-->
+<script>
+    // Get a reference to all quantity input fields
+    var quantityInputs = document.querySelectorAll('.quantity-input');
+
+    // Add event listener for input changes to all quantity input fields
+    quantityInputs.forEach(function(input) {
+        input.addEventListener('input', function(event) {
+            // Get the current value of the input field
+            var value = parseInt(this.value);
+
+            // Check if the value is less than 1 or not a number
+            if (value < 1 || isNaN(value)) {
+                // If the value is less than 1 or not a number, reset it to 1
+                this.value = 1;
+            }
+        });
+    });
+</script>
+
+
+
+<!--script for subtotal-->
+<script>
+    function updateSubtotal(itemId) {
+        // Get the quantity input field and subtotal element for the specified item
+        var quantityInput = document.getElementById('quantityInput' + itemId);
+        var subtotalElement = document.getElementById('subtotal' + itemId);
+
+        // Get the current quantity value
+        var quantity = parseInt(quantityInput.value);
+
+        // Update the subtotal based on the quantity
+        var pricePerItem = 118.19; // Example price per item
+        var subtotal = quantity * pricePerItem;
+
+        // Update the subtotal element with the new subtotal value
+        subtotalElement.textContent = '$' + subtotal.toFixed(2);
+    }
+</script>
+
+<!--script to reduce removed item price-->
+<script>
+    $(document).ready(function() {
+    // Add click event listener to "remove" icons
+    $('#cart').on('click', '.fa-times-circle', function(event) {
+        // Prevent default link behavior
+        event.preventDefault();
+        
+        // Find the parent <tr> element and remove it from the table
+        $(this).closest('tr').remove();
+
+        // Update subtotal and total price after item removal
+        updateSubtotalAndTotal();
+    });
+});
+
+function updateSubtotalAndTotal() {
+    // Calculate the total and update the subtotal and total price
+    var total = 0;
+    $('.quantity-input').each(function() {
+        var itemId = parseInt($(this).attr('id').replace('quantityInput', ''));
+        var quantity = parseInt($(this).val());
+        var pricePerItem = 118.19; // Example price per item
+        var subtotal = quantity * pricePerItem;
+        $('#subtotal' + itemId).text('$' + subtotal.toFixed(2));
+        total += subtotal;
+    });
+
+    // Update the cart total and total price element with the new total value
+    var cartTotalElement = $('#cartTotal');
+    cartTotalElement.text('$' + total.toFixed(2));
+
+    var totalPriceElement = $('#totalPrice');
+    totalPriceElement.text('$' + total.toFixed(2));
+}
+
+// Function to ensure the user does not enter any value = 0 or negative
+$('.quantity-input').on('input', function() {
+    var value = parseInt($(this).val());
+    if (value < 1 || isNaN(value)) {
+        $(this).val(1);
+    }
+});
+
+// Call the updateSubtotalAndTotal function when the page loads
+updateSubtotalAndTotal();
+
+</script>
+
+
+
+        </section>
+        <section id="cart-add" class="section-p1">
+            <div id="coupon">
+                <h3>Apply Coupon</h3>
+                <div>
+                    <input type="text" placeholder="Enter Your Coupon">
+                    <button class="normal">Apply</button>
+                </div> 
+            </div>
+            <div id="subtotal">
+                <h3>cart Totals</h3>
+                <table>
+                    <tr>
+                        <td>Cart Subtotal</td>
+                        <td id="cartTotal">$ 335</td>
+                    </tr>
+                    <tr>
+                        <td>Shipping</td>
+                        <td>Free</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td id="totalPrice"><strong>$ 335</strong></td>
+                    </tr>
+                </table>
+                <button class="normal">Proceed to check out</button>
+
+            </div>
+<!--sript for subtotal total for all-->
+<script>
+    function updateSubtotal(itemId) {
+        // Get the quantity input field and subtotal element for the specified item
+        var quantityInput = document.getElementById('quantityInput' + itemId);
+        var subtotalElement = document.getElementById('subtotal' + itemId);
+
+        // Get the current quantity value
+        var quantity = parseInt(quantityInput.value);
+
+        // Update the subtotal based on the quantity
+        var pricePerItem = 118.19; // Example price per item
+        var subtotal = quantity * pricePerItem;
+
+        // Update the subtotal element with the new subtotal value
+        subtotalElement.textContent = '$' + subtotal.toFixed(2);
+
+        // Calculate the total of all items in the cart
+        var total = 0;
+        var itemCount = 3; // Number of items in the cart (adjust accordingly)
+        for (var i = 1; i <= itemCount; i++) {
+            var subtotalValue = parseFloat(document.getElementById('subtotal' + i).textContent.replace('$', ''));
+            total += subtotalValue;
+        }
+
+        // Update the cart total element with the new total value
+        document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+    }
+</script>
+
+<!--script for total price-->
+<script>
+    function updateSubtotal(itemId) {
+        // Get the quantity input field and subtotal element for the specified item
+        var quantityInput = document.getElementById('quantityInput' + itemId);
+        var subtotalElement = document.getElementById('subtotal' + itemId);
+
+        // Get the current quantity value
+        var quantity = parseInt(quantityInput.value);
+
+        // Update the subtotal based on the quantity
+        var pricePerItem = 118.19; // Example price per item
+        var subtotal = quantity * pricePerItem;
+
+        // Update the subtotal element with the new subtotal value
+        subtotalElement.textContent = '$' + subtotal.toFixed(2);
+
+        // Calculate the total price of the cart
+        var total = 0;
+        var itemCount = 3; // Number of items in the cart (adjust accordingly)
+        for (var i = 1; i <= itemCount; i++) {
+            var subtotalValue = parseFloat(document.getElementById('subtotal' + i).textContent.replace('$', ''));
+            total += subtotalValue;
+        }
+
+        // Update the cart total and total price element with the new total value
+        var cartTotalElement = document.getElementById('cartTotal');
+        cartTotalElement.textContent = '$' + total.toFixed(2);
+
+        var totalPriceElement = document.getElementById('totalPrice');
+        totalPriceElement.textContent = '$' + total.toFixed(2);
+    }
+</script>
+
+
+
+
+
+        </section>
+        <footer class="section-p1">
+            <div class="col">
+                <img class="logo" img src="images/download.png" alt="">
+                <h3>contact</h3><br>
+                <p><strong>Address:</strong> 9790 Nyerere Road, Gongo la Mboto, Dar Es Salaam</p>
+                <p><strong>Phone:</strong>+255 768 398 603 /+255 613 374 380</p>
+                <p><strong>Hours:</strong> 10:00-18-00pm, Mon - Sat </p><br>
+                <div class="follow">
+                    <h3>Follow us</h3><br>
+                    <div class="icon">
+                        <i class="fab fa-facebook-f"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                </div>
+           </div>
+           <div class="col">
+            <h4>About</h4><br>
+            <a href="#">About us</a>
+            <a href="#">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms& Conditions</a>
+            <a href="#">Contact us</a>
+            </div>
+           <div class="col">
+              <h4>My Account</h4><br>
+              <a href="#">Sign in</a>
+              <a href="#">View cart</a>
+              <a href="#">My Wishlist</a>
+              <a href="#">Track My Order</a>
+              <a href="#">Help</a>
+           </div>
+           <div class="col install">
+                <h4>Install App</h4><br>
+                <p>From App Store or Google play</p>
+                <div class="row">
+                    <img src="images/appstoreee 01.png" alt="">
+                    <img src="images/google crop 77887.png" alt="">
+                </div>
+                <p>Secured Payment Gateways</p>
+                <img src="images/malipo 03.png" alt="">
+            </div>
+
+            <div class="copyright">
+                <p>© Ndilla Fashion Clothing. All right reserved</p>
+            </div>
+        </footer>
+    <script src="script.js"></script>
+    </body>
+</html>
